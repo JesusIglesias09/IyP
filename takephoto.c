@@ -15,7 +15,7 @@ void forkAndExecute (const char *path, char *const args[]) {
     }
     if (pid != 0) return;
 // If pid == 0, this is the child process.
-    if (system("raspistill -n -o Desktop/image.jpg") == -1) {
+    if (execvp(path, args) == -1) {
         fprintf ( stderr,
             "execvp(%s) failed: %s %s",
             path, strerror(errno)
@@ -25,11 +25,12 @@ void forkAndExecute (const char *path, char *const args[]) {
 } 
 
 int main (int argc, const char *argv[]) {
-    char *const args[] = { "raspistill", "-n", "-o", "Desktop/frst_image.jpg" };
-    //forkAndExecute("raspistill", args);
-    system("sudo raspistill -n -o image.jpg");
+    char *const args[] = {"sudo raspistill", "-n", "-o", "Image.jpg" };
     puts("Taking photo");
-    sleep(7);
+    forkAndExecute("raspistill", args);
+    sleep(2);
+    puts("Wait for the photo");
+    sleep(5);
     return 0;
 }  
 
