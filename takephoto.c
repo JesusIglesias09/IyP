@@ -3,6 +3,7 @@
 #include <string.h>  // strerror()
 #include <errno.h>   // errno
 #include <stdlib.h>  // exit()
+#include "sndimg.h"
 
 
 void forkAndExecute (const char *path, char *const args[]) {
@@ -26,12 +27,11 @@ void forkAndExecute (const char *path, char *const args[]) {
 } 
 
 int main (int argc, const char *argv[]) {
-    char *const args[] = {"sudo raspistill", "-n", "-o", "Image.jpg" };
+    char *const args[] = {"sudo raspistill", "-n", "-o", "image.jpg" };
     puts("Taking photo");
     forkAndExecute("raspistill", args);
-    sleep(2);
-    puts("Wait for the photo");
-    sleep(5);
+    sleep(10);
+    sndimg();
     return 0;
 }  
 

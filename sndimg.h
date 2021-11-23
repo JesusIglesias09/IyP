@@ -7,7 +7,7 @@
 #include <stdlib.h>
 #define PORT 8000
    
-int main(int argc, char const *argv[])
+char sndimg(void)
 {
        
     int sock = 0;
@@ -15,7 +15,7 @@ int main(int argc, char const *argv[])
     if ((sock = socket(AF_INET, SOCK_STREAM, 0)) < 0)
     {
         printf("\n Socket creation error \n");
-        return -1;
+        return 0;
     }
    
     serv_addr.sin_family = AF_INET;
@@ -25,13 +25,13 @@ int main(int argc, char const *argv[])
     if(inet_pton(AF_INET, "192.168.1.9", &serv_addr.sin_addr)<=0) 
     {
         printf("\nInvalid address/ Address not supported \n");
-        return -1;
+        return 0;
     }
    
     if (connect(sock, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0)
     {
         printf("\nConnection Failed \n");
-        return -1;
+        return 0;
     }
     
     //Get pic size
@@ -55,5 +55,5 @@ int main(int argc, char const *argv[])
         send(sock, send_buffer, nb, 0);
         nb = fread(send_buffer, 1, sizeof(send_buffer), picture);
     }
-    return 0;
+    return 1;
 }
