@@ -4,22 +4,12 @@
 #include <arpa/inet.h>
 #include <unistd.h>
 #include <string.h>
+#include <stdlib.h>
 #define PORT 8000
    
 int main(int argc, char const *argv[])
 {
-    
-    ///////////////////STRUCT FOR DATA///////////////////////////
-    struct packID 
-    {
-        char SOF;
-        char SENSOR;
-        char DATA_SIZE;
-        char DATA;
-        uint32_t checksum;
-    }IDPACKED;
-    /////////////////////////////////////////////////////////////
-    
+       
     int sock = 0;
     struct sockaddr_in serv_addr;
     if ((sock = socket(AF_INET, SOCK_STREAM, 0)) < 0)
@@ -44,15 +34,26 @@ int main(int argc, char const *argv[])
         return -1;
     }
     
-    //////////////////////////DATA FROM STRUCT//////////////////////////
-    IDPACKED.SOF = 0xAA;
-    IDPACKED.SENSOR = 0x01;
-    IDPACKED.DATA_SIZE = 0x01;
-    IDPACKED.DATA = 0x01;
-    IDPACKED.checksum = IDPACKED.SOF + IDPACKED.SENSOR + IDPACKED.DATA_SIZE + IDPACKED.DATA;
-    ////////////////////////////////////////////////////////////////////
-    
-    send(sock , &IDPACKED , sizeof(IDPACKED) , 0 );
-    printf("Hello message sent\n");
+    //Get pic size
+    FILE *picture;
+    picture = fopen("image.jpg", "r");
+    uint32_t size;
+    fseek(picture, 0, SEEK_END);
+    size = ftell(picture);
+    fseek(picture, 0, SEEK_SET);
+
+    //Send pic size
+    char p_array[size];
+    send(sock, &size, sizeof(size),0);
+    printf("Size sent\n");
+
+    //Send pic as byte array
+    printf("Sending Picture as Byte Array\n");
+    char send_buffer[100];
+    int nb = fread(send_buffer, 1, sizeof(send_buffer), picture);
+    while(!feof(picture)) {
+        send(sock, send_buffer, nb, 0);
+        nb = fread(send_buffer, 1, sizeof(send_buffer), picture);
+    }
     return 0;
 }
