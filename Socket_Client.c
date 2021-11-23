@@ -68,7 +68,7 @@ int main(int argc, char const *argv[])
 
     // Convert IPv4 and IPv6 addresses from text to binary form
 
-    if(inet_pton(AF_INET, "192.168.1.12", &serv_addr.sin_addr)<=0) 
+    if(inet_pton(AF_INET, "192.168.1.9", &serv_addr.sin_addr)<=0) 
 
     {
 
@@ -100,7 +100,7 @@ int main(int argc, char const *argv[])
 
     IDPACKED.DATA_SIZE = 0x01;
 
-    IDPACKED.DATA = 0xDD;
+    IDPACKED.DATA = 0x55;
 
     IDPACKED.checksum = IDPACKED.SOF + IDPACKED.SENSOR + IDPACKED.DATA_SIZE + IDPACKED.DATA;
 
