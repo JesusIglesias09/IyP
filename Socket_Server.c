@@ -18,7 +18,6 @@ int main(int argc, char  *argv[])
     int32_t opt = 1;
     int32_t addrlen = sizeof(address);
     char buffer[1024] = {0};
-    //char *hello = "Hello from server";
 
     // Creating socket file descriptor
     if ((server_fd = socket(AF_INET, SOCK_STREAM, 0)) == 0)
