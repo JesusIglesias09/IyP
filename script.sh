@@ -1,0 +1,11 @@
+#!/bin/bash
+./takephoto
+./takephoto
+./takephoto
+./takephoto
+./takephoto
+./takephoto
+./takephoto
+./takephoto
+./takephoto
+./takephoto
