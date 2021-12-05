@@ -7,9 +7,11 @@
 #include <string.h>
 #include <stdint.h>
 #define PORT 8000
+#define IMGNEEDED 4
 
 int main(int argc, char  *argv[])
 {
+
     int32_t server_fd;
     int32_t new_socket;
     struct sockaddr_in address;
@@ -58,21 +60,40 @@ int main(int argc, char  *argv[])
     }
 
     printf("ENDING PHASE\n");
-    //Read pic size
-    int size;
-    read( new_socket , &size, sizeof(int));
-    printf("Size image =  %d\n",size);
+    
+    
 
-    //Read pic byte array
-    printf("Reading Picture Byte Array\n");
-    char p_array[100];
-    FILE *image = fopen("image.jpg", "w");
-    int nb = read(new_socket, p_array, 100);
-    while (nb > 0) {
-        fwrite(p_array, 1, nb, image);
-        nb = read(new_socket, p_array, 100);
+
+    
+    
+    for(uint8_t count=0;count<IMGNEEDED;count++){
+        char prefix[100] = "Image";
+    	char str[10][2] ={{"1"},{"2"},{"3"},{"4"},{"5"},{"6"},{"7"},{"8"},{"9"},{"0"}};
+    	char suffix[] = ".jpg";
+    	//Read pic size
+    	int size=0;
+    	read( new_socket , &size, sizeof(int));
+    	printf("Image size =  %d\n",size);
+
+   	//Read pic byte array
+   	char p_array[100]="";
+    	strcat(prefix,str[count]);
+    	strcat(prefix,suffix);
+    	FILE *image = fopen(prefix, "w");
+    	printf("Receiving image\n");
+    	int nb = read(new_socket, p_array, 100);
+    	fwrite(p_array, 1, nb, image);
+    	while (size-ftell(image)>200) {
+    	    nb = read(new_socket, p_array, 100);
+    	    fwrite(p_array, 1, nb, image);
+    	    
+    	}
+    	nb = read(new_socket, p_array, size-ftell(image));
+    	fwrite(p_array, 1, nb, image);
+    	fclose(image);
+    	
+    	printf("Image created\n");
     }
-    fclose(image);
-    printf("Image created");
+    close(new_socket);
     return 0;
 }
