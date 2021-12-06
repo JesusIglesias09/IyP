@@ -17,7 +17,6 @@ int main(int argc, char  *argv[])
     struct sockaddr_in address;
     int32_t opt = 1;
     int32_t addrlen = sizeof(address);
-    char buffer[1024] = {0};
 
     // Creating socket file descriptor
     if ((server_fd = socket(AF_INET, SOCK_STREAM, 0)) == 0)
@@ -36,7 +35,6 @@ int main(int argc, char  *argv[])
     address.sin_family = AF_INET;
     address.sin_addr.s_addr = INADDR_ANY;
     address.sin_port = htons( PORT );
-
 
     printf("PHASE 1\n");
     if (bind(server_fd, (struct sockaddr *)&address,
@@ -58,25 +56,20 @@ int main(int argc, char  *argv[])
         perror("accept");
         return 1;
     }
-
     printf("ENDING PHASE\n");
-    
-    
 
-
-    
-    
     for(uint8_t count=0;count<IMGNEEDED;count++){
         char prefix[100] = "Image";
     	char str[10][2] ={{"1"},{"2"},{"3"},{"4"},{"5"},{"6"},{"7"},{"8"},{"9"},{"0"}};
     	char suffix[] = ".jpg";
+
     	//Read pic size
     	int size=0;
     	read( new_socket , &size, sizeof(int));
     	printf("Image size =  %d\n",size);
 
-   	//Read pic byte array
-   	char p_array[100]="";
+   	    //Read pic byte array
+   	    char p_array[100]="";
     	strcat(prefix,str[count]);
     	strcat(prefix,suffix);
     	FILE *image = fopen(prefix, "w");
@@ -86,12 +79,10 @@ int main(int argc, char  *argv[])
     	while (size-ftell(image)>200) {
     	    nb = read(new_socket, p_array, 100);
     	    fwrite(p_array, 1, nb, image);
-    	    
     	}
     	nb = read(new_socket, p_array, size-ftell(image));
     	fwrite(p_array, 1, nb, image);
     	fclose(image);
-    	
     	printf("Image created\n");
     }
     close(new_socket);
