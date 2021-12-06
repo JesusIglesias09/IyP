@@ -8,6 +8,7 @@ class KalmanAngle:
         self.rate = 0.0
         self.P=[[0.0,0.0],[0.0,0.0]]
 
+
     '''def kalman():
         QAngle = 0.001
         QBias = 0.003
