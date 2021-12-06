@@ -13,13 +13,14 @@
 #define IMGNEEDED 4
 #define MAXSOCKETS   	10   //Limit of sockets.
 #define TIMETOSLEEP  	10   //Time in seconds that pthread
+void *SendMessages (void *ptr);
 
 //Global variables used by ptheads
 int32_t listSocket[MAXSOCKETS];
 int32_t socketIndex;          //Socket Index
 pthread_mutex_t socketMutex = PTHREAD_MUTEX_INITIALIZER;
 int32_t storage_socketID[5];
-void *SendMessages (void *ptr);
+
 
 int main(int argc, char  *argv[])
 {
