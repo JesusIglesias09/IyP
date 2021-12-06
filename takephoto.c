@@ -8,10 +8,7 @@
 #define PORT 8000
 #define IPADDRESS "192.168.1.9"
 #define IMGNEEDED 4
-uint8_t bImageTakenFlag;
-void forkAndExecute (const char *path, char *const args[]);
 
-// Client side C/C++ program to demonstrate Socket programming
 int main(int argc, const char *argv[])
 {
     uint32_t sock = 0;
@@ -26,7 +23,7 @@ int main(int argc, const char *argv[])
     serv_addr.sin_port = htons(PORT);
 
     // Convert IPv4 and IPv6 addresses from text to binary form
-    if(inet_pton(AF_INET, IPADDRESS, &serv_addr.sin_addr)<=0) 
+    if(inet_pton(AF_INET, IPADDRESS, &serv_addr.sin_addr)<=0)
     {
         printf("\nInvalid address/ Address not supported \n");
         return 0;
@@ -38,6 +35,7 @@ int main(int argc, const char *argv[])
     }
     for(uint32_t count=0;count<IMGNEEDED;count++){
         system("raspistill -n -o image.jpg");
+
         //Get pic size
     	FILE *picture;
     	picture = fopen("image.jpg", "r");
@@ -47,7 +45,6 @@ int main(int argc, const char *argv[])
     	fseek(picture, 0, SEEK_SET);
 
         //Send pic size
-        char p_array[size];
         send(sock, &size, sizeof(size),0);
         printf("Size sent\n");
 
