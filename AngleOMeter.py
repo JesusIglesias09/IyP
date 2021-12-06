@@ -7,14 +7,15 @@
 
 
 from Kalman import KalmanAngle
-import smbus			#import SMBus module of I2C
+import smbus #import smbus
 import time
 import math
 
 kalmanX = KalmanAngle()
 kalmanY = KalmanAngle()
 
-RestrictPitch = True	#Comment out to restrict roll to ±90deg instead - please read: http://www.freescale.com/files/sensors/doc/app_note/AN3461.pdf
+
+RestrictPitch = True
 radToDeg = 57.2957786
 kalAngleX = 0
 kalAngleY = 0
